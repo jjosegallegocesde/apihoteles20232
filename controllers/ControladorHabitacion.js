@@ -1,17 +1,21 @@
+
+import {ServicioHabitacion} from '../services/ServicioHabitacion.js'
+
 export class ControladorHabitacion{
 
     constructor(){}
-    registrarHabitacion(peticion,respuesta){
+    async registrarHabitacion(peticion,respuesta){
         try{
-
+            let servicioHabitacion=new ServicioHabitacion()
             //1. Esculcar los datos que quieren usar para el registro
             let datosHabitacionRegistrar=peticion.body
             //2. Validar los datos
             //3. Intentar guardar los datos
+            await servicioHabitacion.registrarHabitacion(datosHabitacionRegistrar)
             //4. Responder
             respuesta.status(200).json({
                 "mensaje":"exito en la operacion de guardado",
-                "datos":"aca van los datos que se guardaron"
+                "datos":datosHabitacionRegistrar
             })
         }catch(error){
             respuesta.status(400).json({
@@ -19,14 +23,14 @@ export class ControladorHabitacion{
             })
         }
     }
-    buscarHabitaciones(peticion,respuesta){
+    async buscarHabitaciones(peticion,respuesta){
         try{
-
+            let servicioHabitacion=new ServicioHabitacion()
             //1. INTENTAR BUSCAR LOS DATOS EN BD
             //2. Responder
             respuesta.status(200).json({
                 "mensaje":"exito en la operacion de busqueda",
-                "datos":"aca van los datos que se buscaron"
+                "datos":await servicioHabitacion.buscarHabitaciones()
             })
 
         }catch(error){
@@ -35,8 +39,9 @@ export class ControladorHabitacion{
             })
         }
     }
-    buscarHabitacionPorId(peticion,respuesta){
+    async buscarHabitacionPorId(peticion,respuesta){
         try{
+            let servicioHabitacion = new ServicioHabitacion()
             //1.Esculcar los parametros de la peticion
             let idHabitacionBuscar=peticion.params.id
             //2. validar el dato que llego
@@ -44,7 +49,7 @@ export class ControladorHabitacion{
             //4. responder
             respuesta.status(200).json({
                 "mensaje":"exito en la operacion de busqueda",
-                "datos":"aca van los datos que se buscaron"
+                "datos":await servicioHabitacion.buscarHabitacion(idHabitacionBuscar)
             })
         }catch(error){
             respuesta.status(400).json({
@@ -52,17 +57,19 @@ export class ControladorHabitacion{
             })
         }
     }
-    modificarHabitacion(peticion,respuesta){
+    async modificarHabitacion(peticion,respuesta){
         try{
+            let servicioHabitacion= new ServicioHabitacion()
             //1.traigo el id a editar de la peticion
             let idHabitacionModificar=peticion.params.id
             let datosHabitacionModificar=peticion.body
             //validar los datos
             //Intentar buscar y modificar en BD
+            await servicioHabitacion.modificarHabitacion(idHabitacionModificar,datosHabitacionModificar)
             //responder
             respuesta.status(200).json({
                 "mensaje":"exito en la operacion de edicion",
-                "datos":"aca van los datos que se editaron"
+                "datos":datosHabitacionModificar
             })
 
         }catch(error){
@@ -71,7 +78,7 @@ export class ControladorHabitacion{
             })
         }
     }
-    borrarHabitacion(peticion,respuesta){
+    async borrarHabitacion(peticion,respuesta){
         try{
 
             let idHabitacionBorrar=peticion.params.id
